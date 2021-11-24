@@ -11,6 +11,7 @@ To run the server, you must have Node.js installed on your machine. To run:
 ```
 $ git clone https://github.com/mattpaynedev/zipcodes.git
 $ cd zipcodes
+$ npm install
 $ node server.js
 ```
 
