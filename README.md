@@ -1,6 +1,6 @@
 # ZipCodes API:
 
-A web API to manage a list of ZIP codes. 
+A web API to manage a list of 5-digit ZIP codes. 
 
 ---
 
