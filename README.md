@@ -52,4 +52,4 @@ Returns a JSON object with an array containing stringified values for each numbe
 <br />
 
 ### Implementation
-The ZIP codes are stored in a custom class, consisting of a doubly linked list and a JS object. The linked list handles the sorting and ranges (and merges thereof) while the JS object provides quick lookup times. Checking if a ZIP code is in the list is O(1) time and successive numbers are grouped together when the display method is called.
+The ZIP codes are stored in a custom class, consisting of a doubly linked list and a JS object. The linked list handles the sorting and ranges (and merges thereof) while the JS object provides quick lookup times. The `has` method is O(1) time and `insert`, `delete`, and `display` are all O(n). For `display`, successive numbers are grouped together in the resulting array.
