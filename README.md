@@ -4,7 +4,7 @@ A web API to manage a list of 5-digit ZIP codes.
 
 ---
 
-### Usage:
+## Usage:
 
 To run the server, you must have Node.js installed on your machine. To run:
 
@@ -16,7 +16,7 @@ $ node server.js
 
 The default port is `3001` on localhost. If you need to install any dependencies, run `$ npm install`.
 
-### Endpoints:
+## Endpoints:
 
 `.../insert/[number]`
 
@@ -49,7 +49,7 @@ Returns a JSON object (see below) with an array containing stringified values fo
 <br />
 
 ## Response Structure:
-For successful calls (`data` field keys can be: `zipCodes`, `inserted`, `deleted`, or the lookup value (for `has` calls)):
+### For successful calls:
 ```
 {
     "success": true,
@@ -59,13 +59,16 @@ For successful calls (`data` field keys can be: `zipCodes`, `inserted`, `deleted
     }
 }
 ```
-For unsuccessful calls (message varies based on the error):
+`data` field keys can be: `zipCodes`, `inserted`, `deleted`, or the lookup value (for `has` calls).
+
+### For unsuccessful calls:
 ```
 {
     "success": false,
     "message": "Invalid input"
 }
 ```
+`message` varies based on the error.
 
-### Implementation
+## Implementation
 The ZIP codes are stored in a custom class, consisting of a doubly linked list and a JS object. The linked list handles the sorting while the JS object provides quick lookup times. The `has` and `delete` methods are O(1) time and `insert` and `display` are O(n). For `display`, successive numbers are grouped together in the resulting array. The groupings are genereated at the time of the `display` call.
