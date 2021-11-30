@@ -1,3 +1,7 @@
+/*
+    This API manages a user defined list of zip codes. Responses are JSON objects with `success`, `message`, and `data` fields (when applicable). Endpoints supports are Insert, Delete, Has, and Display.
+*/
+
 const express = require("express")
 const { ZipLog } = require("./zipLog.js")
 const cors = require("cors")

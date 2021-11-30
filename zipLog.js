@@ -1,3 +1,18 @@
+/*
+    The main data structure here consists of a doubly linked list and a hashmap (JS object). The hashmap allows for O(1) lookup times to see if an item is in the list and O(1) deletions, since we can directly reference an item in the list. The linked list provides for linear insertions and allows for pointer references to individual list items.
+
+    Time Complexity:
+        .has()      -> O(1)
+        .display()  -> O(n)
+        .insert()   -> O(n)
+        .delete()   -> O(1)
+    
+    Space Complexity:
+        O(n)
+
+    Where n = number of items in the list.
+*/
+
 class ZipNode {
     constructor(val, prev = null, next = null) {
         this.val = val
@@ -37,6 +52,7 @@ exports.ZipLog = class ZipLog {
             )
             node = node.next
         }
+
         return {
             success: true,
             message: "Display Zip Codes",
@@ -80,8 +96,8 @@ exports.ZipLog = class ZipLog {
         } else {
             let node = this.list
 
+            // find the insertion point
             while (node.val < val && node.next) {
-                // find the insertion point
                 node = node.next
             }
 
@@ -136,6 +152,7 @@ exports.ZipLog = class ZipLog {
         if (node.next) node.next.prev = node.prev
 
         delete this.codes[val]
+
         return {
             success: true,
             message: "Zip Code deleted",
