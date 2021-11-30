@@ -79,16 +79,28 @@ exports.ZipLog = class ZipLog {
             this.codes[val] = newNode
         } else {
             let node = this.list
-            let prev = null
-            while (node && node.val < val) {
+
+            while (node.val < val && node.next) {
                 // find the insertion point
-                prev = node
                 node = node.next
             }
+
+            let prev
+            if (node.val < val) {
+                // insert at the end of the list
+                prev = node
+                node = node.next
+            } else {
+                // all other inserts
+                prev = node.prev
+            }
+
             const newNode = new ZipNode(val)
             if (prev) {
+                // normal insert
                 prev.next = newNode
             } else {
+                // insert at the head of the list
                 this.list = newNode
             }
             newNode.prev = prev
