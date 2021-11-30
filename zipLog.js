@@ -1,12 +1,26 @@
+class ZipNode {
+    constructor(val, prev = null, next = null) {
+        this.start = val
+        this.end = val
+        this.prev = prev
+        this.next = next
+    }
+}
+
 exports.ZipLog = class ZipLog {
     constructor() {
         this.codes = {}
-        this.listHead = null
         this.list = null
     }
 
     has(val) {
-        return { [val]: this.codes[val] ? true : false }
+        return {
+            success: true,
+            message: "Check if Zip Code exists",
+            data: {
+                [val]: this.codes[val] ? true : false
+            }
+        }
     }
 
     display() {
@@ -20,7 +34,13 @@ exports.ZipLog = class ZipLog {
             }
             node = node.next
         }
-        return arr
+        return {
+            success: true,
+            message: "Display Zip Codes",
+            data: {
+                zipCodes: arr
+            }
+        }
     }
 
     _stringifyZip(val) {
@@ -36,11 +56,17 @@ exports.ZipLog = class ZipLog {
 
     insert(val) {
         if (val < 1 || val > 99999) {
-            return { error: "Invalid input" }
+            return {
+                success: false,
+                message: "Invalid input"
+            }
         }
 
         if (this.codes[val]) {
-            return { error: "Zip Code already exists in list" }
+            return {
+                success: false,
+                message: "Zip Code already exists in list"
+            }
         }
 
         if (!this.list) {
@@ -57,53 +83,26 @@ exports.ZipLog = class ZipLog {
                 node = node.next
             }
             if (!prev) {
-                // insert at the beginning of the list
-                if (node.start > val + 1) {
-                    const newNode = new ZipNode(val)
-                    this._insertNewNode(prev, node, newNode)
-                    this.list = newNode
-                    this.codes[val] = newNode
-                } else {
-                    node.start = val
-                    this.codes[val] = node
-                }
+                this._insertAtBeginning(prev, node, val)
             } else if (!node) {
-                // insert at the end of the list
-                if (prev.end === val - 1) {
-                    prev.end = val
-                    this.codes[val] = prev
-                } else {
-                    const newNode = new ZipNode(val)
-                    this._insertNewNode(prev, node, newNode)
-                    this.codes[val] = newNode
-                }
+                this._insertAtEnd(prev, node, val)
             } else if (node.start > val + 1 && prev.end < val - 1) {
-                // insert a completely new node (no merges)
                 const newNode = new ZipNode(val)
                 this._insertNewNode(prev, node, newNode)
                 this.codes[val] = newNode
-            } else if (prev && prev.end === val - 1) {
-                // merge with previous node
-                prev.end = val
-                if (node.start === val + 1) {
-                    // merge with next node, if needed
-                    prev.end = node.end
-                    let n = node.start
-                    while (n < node.end) {
-                        this.codes[n] = prev
-                        n++
-                    }
-                    if (node.next) node.next.prev = prev
-                    prev.next = node.next
-                }
-                this.codes[val] = prev
+            } else if (prev.end === val - 1) {
+                this._mergeWithPrevious(prev, node, val)
             } else if (node.start === val + 1) {
-                // merge with next node only
-                node.start = val
-                this.codes[val] = node
+                this._mergeWithNext(node, val)
             }
         }
-        return { inserted: this._stringifyZip(val) }
+        return {
+            success: true,
+            message: "Zip Code inserted",
+            data: {
+                inserted: this._stringifyZip(val)
+            }
+        }
     }
 
     _insertNewNode(prev, node, newNode) {
@@ -113,9 +112,56 @@ exports.ZipLog = class ZipLog {
         if (node) node.prev = newNode
     }
 
+    _insertAtBeginning(prev, node, val) {
+        if (node.start > val + 1) {
+            const newNode = new ZipNode(val)
+            this._insertNewNode(prev, node, newNode)
+            this.list = newNode
+            this.codes[val] = newNode
+        } else {
+            node.start = val
+            this.codes[val] = node
+        }
+    }
+
+    _insertAtEnd(prev, node, val) {
+        if (prev.end === val - 1) {
+            prev.end = val
+            this.codes[val] = prev
+        } else {
+            const newNode = new ZipNode(val)
+            this._insertNewNode(prev, node, newNode)
+            this.codes[val] = newNode
+        }
+    }
+
+    _mergeWithPrevious(prev, node, val) {
+        prev.end = val
+        if (node.start === val + 1) {
+            // merge with next node, if needed
+            prev.end = node.end
+            let n = node.start
+            while (n < node.end) {
+                this.codes[n] = prev
+                n++
+            }
+            if (node.next) node.next.prev = prev
+            prev.next = node.next
+        }
+        this.codes[val] = prev
+    }
+
+    _mergeWithNext(node, val) {
+        node.start = val
+        this.codes[val] = node
+    }
+
     delete(val) {
         if (!this.codes[val]) {
-            return { error: `Zip Code ${val} is not in the list.` }
+            return {
+                success: false,
+                message: `Zip Code ${val} is not in the list.`
+            }
         }
 
         const node = this.codes[val]
@@ -140,15 +186,12 @@ exports.ZipLog = class ZipLog {
             node.next = newNode
         }
         delete this.codes[val]
-        return { deleted: val }
-    }
-}
-
-class ZipNode {
-    constructor(val, prev = null, next = null) {
-        this.start = val
-        this.end = val
-        this.prev = prev
-        this.next = next
+        return {
+            success: true,
+            message: "Zip Code deleted",
+            data: {
+                deleted: val
+            }
+        }
     }
 }

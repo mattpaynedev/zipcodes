@@ -10,7 +10,7 @@ const Z = new ZipLog()
 app.post("/insert/:zip", (req, res) => {
     const zip = parseInt(req.params.zip)
     const output = Z.insert(zip)
-    if (output.error) {
+    if (!output.success) {
         res.status(400).json(output)
     } else {
         res.status(200).json(output)
@@ -20,7 +20,7 @@ app.post("/insert/:zip", (req, res) => {
 app.delete("/delete/:zip", (req, res) => {
     const zip = parseInt(req.params.zip)
     const output = Z.delete(zip)
-    if (output.error) {
+    if (!output.success) {
         res.status(400).json(output)
     } else {
         res.status(200).json(output)
