@@ -21,35 +21,51 @@ The default port is `3001` on localhost. If you need to install any dependencies
 `.../insert/[number]`
 
 Inserts a ZIP code into the list. 
-Returns a JSON object with an `inserted` field (for successful inserts) or an `error` field (for unsuccessful inserts).
+Returns a JSON object (see below).
 <br />
 <br />
-<br />
-<br />
+
 `.../delete/[number]`
 
 Deletes a ZIP code from the list. 
-Returns a JSON object with a `deleted` field (for successful deletions) or an `error` field (for unsuccessful deletions).
+Returns a JSON object (see below).
 <br />
 <br />
-<br />
-<br />
+
 `.../has/[number]`
 
 Checks if a ZIP code exists in the list. 
-Returns a JSON object with a boolean formatted as `{[number]: true/false}`.
+Returns a JSON object (see below).
 <br />
 <br />
-<br />
-<br />
+
 `.../display`
 
 Displays all of the ZIP codes in the list. 
 If there are successive numbers (e.g., `10034, 10035, 10036`) they will be displayed as a range (`10034-10036`).
 For ZIP codes with leading zeros, the leading zeros will be included in the response (e.g., `7093` becomes `07093`).
-Returns a JSON object with an array containing stringified values for each number in the list.
+Returns a JSON object (see below) with an array containing stringified values for each number in the list.
 <br />
 <br />
 
+## Response Structure:
+For successful calls (`data` field keys can be: `zipCodes`, `inserted`, `deleted`, or the lookup value (for `has` calls)):
+```
+{
+    "success": true,
+    "message": "Zip Code inserted",
+    "data": {
+        "inserted": "10039"
+    }
+}
+```
+For unsuccessful calls (message varies based on the error):
+```
+{
+    "success": false,
+    "message": "Invalid input"
+}
+```
+
 ### Implementation
-The ZIP codes are stored in a custom class, consisting of a doubly linked list and a JS object. The linked list handles the sorting and ranges (and merges thereof) while the JS object provides quick lookup times. The `has` method is O(1) time and `insert`, `delete`, and `display` are all O(n). For `display`, successive numbers are grouped together in the resulting array.
+The ZIP codes are stored in a custom class, consisting of a doubly linked list and a JS object. The linked list handles the sorting while the JS object provides quick lookup times. The `has` and `delete` methods are O(1) time and `insert` and `display` are O(n). For `display`, successive numbers are grouped together in the resulting array. The groupings are genereated at the time of the `display` call.
