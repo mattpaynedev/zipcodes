@@ -70,5 +70,5 @@ Returns a JSON object (see below) with an array containing stringified values fo
 ```
 `message` varies based on the error.
 
-## Implementation
+## Implementation:
 The ZIP codes are stored in a custom class, consisting of a doubly linked list and a JS object. The linked list handles the sorting while the JS object provides quick lookup times. The `has` and `delete` methods are O(1) time and `insert` and `display` are O(n). For `display`, successive numbers are grouped together in the resulting array. The groupings are genereated at the time of the `display` call.
